@@ -1,0 +1,18 @@
+# Stems Pro — systemd service
+# Copy to /etc/systemd/system/stems.service then: systemctl enable --now stems
+
+[Unit]
+Description=Stems Pro API Server
+After=network.target
+
+[Service]
+Type=simple
+User=stems
+WorkingDirectory=/home/stems_project/server
+ExecStart=/usr/bin/python3 /home/stems_project/server/run.py
+Restart=always
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

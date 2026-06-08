@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stems Pro — 管理后台</title>
+    <link rel="stylesheet" href="/admin/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>🎸 Stems Pro 管理后台</h1>
+        <div class="stats">
+            <span>📀 {{ stats.song_count }} 首歌</span>
+            <span>🎵 {{ stats.track_count }} 条音轨</span>
+            <span>💾 {{ stats.storage_used_mb }} MB</span>
+        </div>
+    </header>
+
+    <main>
+        <!-- Add Song -->
+        <section class="card add-song">
+            <h2>➕ 添加歌曲</h2>
+            <form action="/admin/songs/add" method="post" class="inline-form">
+                <input type="text" name="title" placeholder="歌名 *" required>
+                <input type="text" name="artist" placeholder="歌手">
+                <button type="submit" class="btn btn-primary">添加</button>
+            </form>
+        </section>
+
+        <!-- Song List -->
+        <section class="song-list">
+            <h2>📋 曲库</h2>
+            {% if songs %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>歌名</th>
+                            <th>歌手</th>
+                            <th>音轨</th>
+                            <th>大小</th>
+                            <th>上传时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for song in songs %}
+                        <tr class="song-row" id="song-{{ song.id }}">
+                            <td>{{ song.id }}</td>
+                            <td>
+                                <span class="song-title-display">{{ song.title }}</span>
+                                <form class="edit-form hidden" action="/admin/songs/{{ song.id }}/edit" method="post">
+                                    <input type="text" name="title" value="{{ song.title }}" required>
+                                    <input type="text" name="artist" value="{{ song.artist }}">
+                                    <button type="submit" class="btn btn-sm">保存</button>
+                                    <button type="button" class="btn btn-sm btn-ghost cancel-edit">取消</button>
+                                </form>
+                            </td>
+                            <td>{{ song.artist or '-' }}</td>
+                            <td>
+                                <div class="track-badges">
+                                    {% for t in song.tracks %}
+                                    <span class="badge track-{{ t.name }}">{{ t.name }}</span>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                            <td>{{ song.total_size_mb }} MB</td>
+                            <td>{{ song.created_at[:19] if song.created_at else '-' }}</td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn btn-sm" onclick="toggleEdit({{ song.id }})">✏️</button>
+                                    <form action="/admin/songs/{{ song.id }}/delete" method="post"
+                                          onsubmit="return confirm('确定删除「{{ song.title }}」？所有音轨文件将被永久删除。')">
+                                        <button type="submit" class="btn btn-sm btn-danger">🗑️</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Upload track row -->
+                        <tr class="upload-track-row">
+                            <td colspan="7">
+                                <details>
+                                    <summary>📤 上传音轨</summary>
+                                    <div class="track-upload-grid">
+                                        {% for tname in track_names %}
+                                        <form action="/admin/songs/{{ song.id }}/upload-track" method="post"
+                                              enctype="multipart/form-data" class="track-upload-form">
+                                            <input type="hidden" name="name" value="{{ tname }}">
+                                            <span class="track-label">{{ tname }}</span>
+                                            <input type="file" name="file" accept="audio/*,.m4a,.mp3,.wav,.flac,.ogg">
+                                            <button type="submit" class="btn btn-sm">上传</button>
+                                            {% set found = song.tracks | selectattr('name', 'equalto', tname) | list %}
+                                            {% if found %}
+                                            <span class="done">✅</span>
+                                            {% endif %}
+                                        </form>
+                                        {% endfor %}
+                                    </div>
+                                </details>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="empty">还没有歌曲，先添加一首吧 🎵</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>Stems Pro v0.1 · 分离你的每一轨</p>
+    </footer>
+
+    <script>
+        function toggleEdit(id) {
+            const row = document.getElementById('song-' + id);
+            if (!row) return;
+            row.classList.toggle('editing');
+        }
+        document.querySelectorAll('.cancel-edit').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.closest('.song-row').classList.remove('editing');
+            });
+        });
+    </script>
+</body>
+</html>

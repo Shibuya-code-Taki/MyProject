@@ -1,0 +1,183 @@
+/* Stems Pro Admin — Styles */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --bg: #0f0f14;
+    --surface: #1a1a24;
+    --border: #2a2a3a;
+    --text: #e0e0e8;
+    --text-dim: #888;
+    --accent: #6c5ce7;
+    --accent2: #a29bfe;
+    --danger: #e74c3c;
+    --green: #2ecc71;
+    --radius: 10px;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+/* ── Header ── */
+header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+header h1 { font-size: 1.5rem; font-weight: 700; }
+.stats {
+    display: flex;
+    gap: 20px;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+}
+.stats span { white-space: nowrap; }
+
+/* ── Main ── */
+main { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+}
+.card h2 { font-size: 1.1rem; margin-bottom: 14px; }
+
+/* ── Forms ── */
+.inline-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.inline-form input[type="text"] {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    min-width: 160px;
+}
+.inline-form input[type="text"]:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+/* ── Buttons ── */
+.btn {
+    border: none;
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.15s;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent2); }
+.btn-danger { background: transparent; color: var(--danger); }
+.btn-danger:hover { background: rgba(231, 76, 60, 0.15); }
+.btn-sm { padding: 4px 10px; font-size: 0.8rem; }
+.btn-ghost { background: transparent; color: var(--text-dim); }
+.btn-ghost:hover { color: var(--text); }
+
+/* ── Table ── */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead th {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 2px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    font-weight: 600;
+}
+tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+/* ── Track badges ── */
+.track-badges { display: flex; gap: 4px; flex-wrap: wrap; }
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.track-vocals { background: rgba(108, 92, 231, 0.25); color: var(--accent2); }
+.track-drums { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+.track-bass { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+.track-guitar { background: rgba(241, 196, 15, 0.2); color: #f1c40f; }
+.track-piano { background: rgba(52, 152, 219, 0.2); color: #3498db; }
+.track-other { background: rgba(149, 165, 166, 0.2); color: #95a5a6; }
+
+/* ── Track upload ── */
+.upload-track-row td { padding: 0; border: none; }
+details { padding: 8px 12px; }
+details summary { cursor: pointer; font-size: 0.85rem; color: var(--text-dim); padding: 6px 0; }
+details summary:hover { color: var(--text); }
+
+.track-upload-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+    padding: 8px 0 12px;
+}
+.track-upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: var(--bg);
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+}
+.track-label { font-weight: 700; color: var(--text-dim); text-transform: uppercase; }
+.track-upload-form input[type="file"] { color: var(--text-dim); font-size: 0.75rem; }
+.track-upload-form .done { font-size: 0.8rem; }
+
+/* ── Edit inline ── */
+.edit-form { display: flex; gap: 6px; align-items: center; }
+.edit-form input[type="text"] {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    width: 110px;
+}
+.hidden { display: none !important; }
+
+.song-row.editing .song-title-display { display: none; }
+.song-row.editing .edit-form { display: flex; }
+
+/* ── Actions ── */
+.actions { display: flex; gap: 4px; align-items: center; }
+
+.empty { text-align: center; color: var(--text-dim); padding: 40px 0; font-size: 1rem; }
+
+/* ── Footer ── */
+footer {
+    text-align: center;
+    color: var(--text-dim);
+    padding: 24px;
+    font-size: 0.85rem;
+}
